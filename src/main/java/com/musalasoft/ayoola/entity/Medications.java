@@ -17,10 +17,10 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class Medications {
     @Id
-    @Pattern(regexp = "[A-Z0-9_]$", message = "Invalid Medication name! only upper case letters, underscore and numbers are allowed")
+    @Pattern(regexp = ".*[A-Z0-9_]$", message = "Invalid Medication code! only upper case letters, underscore and numbers are allowed")
     private String code;
 
-    @Pattern(regexp = "[A-Za-z0-9\\-_]$", message = "Invalid Medication name! only upper case letters, underscore and numbers are allowed")
+    @Pattern(regexp = ".*[A-Za-z0-9-_]$", message = "Invalid Medication name! only alphanumeric characters, hyphen, underscore and numbers are allowed")
     @Column
     private String name;
 

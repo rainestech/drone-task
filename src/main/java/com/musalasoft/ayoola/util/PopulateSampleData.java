@@ -1,0 +1,87 @@
+package com.musalasoft.ayoola.util;
+
+import com.github.javafaker.Faker;
+import com.github.javafaker.service.FakeValuesService;
+import com.github.javafaker.service.RandomService;
+import com.musalasoft.ayoola.dto.DroneModelOptions;
+import com.musalasoft.ayoola.dto.DroneStateOptions;
+import com.musalasoft.ayoola.entity.Drones;
+import com.musalasoft.ayoola.entity.Medications;
+import com.musalasoft.ayoola.repository.DroneRepository;
+import com.musalasoft.ayoola.repository.MedicationRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
+
+@Service
+public class PopulateSampleData {
+    private final DroneRepository droneRepository;
+    private final MedicationRepository medicationRepository;
+
+    private final FakeValuesService fakeValuesService = new FakeValuesService(
+            new Locale("en-GB"), new RandomService());
+    private final Random random = new Random();
+    private final Faker faker = new Faker();
+
+
+    public PopulateSampleData(DroneRepository droneRepository, MedicationRepository medicationRepository) {
+        this.droneRepository = droneRepository;
+        this.medicationRepository = medicationRepository;
+    }
+
+    public void loadItems() {
+        List<Drones> drones = droneRepository.findAll();
+        List<Medications> medications = medicationRepository.findAll();
+
+        for (int i = 0; i < 5; i++) {
+            Drones drone = drones.get(random.nextInt(drones.size()));
+            List<Medications> m = new ArrayList<>();
+            m.add(medications.get(random.nextInt(medications.size())));
+            drone.setLoadedMedications(m);
+
+            droneRepository.save(drone);
+        }
+    }
+
+
+
+    public void populateDrones() {
+        for (int i = 0; i < 10; i++) {
+            Drones d  = new Drones();
+            d.setBatteryCapacity(random.nextInt(100));
+            d.setState(randomState());
+            d.setModel(randomModel());
+            d.setWeight(0);
+            d.setSerialNumber(fakeValuesService.regexify("[A-Za-z0-9-_]{20}"));
+
+            droneRepository.save(d);
+        }
+    }
+
+    public void populateMedication() {
+        for (int i = 0; i < 10; i++) {
+            Medications m  = new Medications();
+            m.setWeight(random.nextInt(200));
+            m.setCode(faker.regexify("[A-Z0-9_]{20}"));
+            m.setImageUrl("https://fake-image.com/" + m.getCode());
+            m.setName(faker.regexify("[A-Za-z0-9-_]{20}"));
+
+            medicationRepository.save(m);
+        }
+    }
+
+    private DroneModelOptions randomModel() {
+        DroneModelOptions[] options = DroneModelOptions.values();
+
+        return options[random.nextInt(options.length)];
+    }
+
+    private DroneStateOptions randomState() {
+        DroneStateOptions[] options = DroneStateOptions.values();
+
+        return options[random.nextInt(options.length)];
+    }
+}

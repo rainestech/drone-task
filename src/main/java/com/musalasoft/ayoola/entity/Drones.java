@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Objects;
@@ -59,5 +61,14 @@ public class Drones {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public void setLoadedMedications(List<Medications> medications) {
+        this.loadedMedications = medications;
+        this.weight = (float) medications.stream().mapToDouble(Medications::getWeight).sum();
+
+        if (this.weight > 500)
+            throw new ResponseStatusException(HttpStatus.PRECONDITION_FAILED,
+                    "Loaded items weight greater than 500 grams");
     }
 }
