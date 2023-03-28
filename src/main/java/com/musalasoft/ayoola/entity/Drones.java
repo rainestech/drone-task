@@ -2,7 +2,9 @@ package com.musalasoft.ayoola.entity;
 
 import com.musalasoft.ayoola.dto.DroneModelOptions;
 import com.musalasoft.ayoola.dto.DroneStateOptions;
+import com.musalasoft.ayoola.util.ValueOfEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -15,20 +17,27 @@ import java.util.Objects;
 @Setter
 @RequiredArgsConstructor
 public class Drones {
+    @NotEmpty
     @Id
     @Column(length = 100)
     private String serialNumber;
 
+    @Min(value = 0, message = "Weight must be a positive number in grams")
+    @Max(value = 500, message = "Maximum weight is 500 grams")
     @Column
     private float weight;
 
+    @Min(value = 0, message = "Battery capacity in percentage must be a positive integer")
+    @Max(value = 100, message = "Maximum Battery Capacity is 100%")
     @Column
     private int batteryCapacity;
 
+    @ValueOfEnum(enumClass = DroneModelOptions.class)
     @Column
     @Enumerated(EnumType.STRING)
     private DroneModelOptions model;
 
+    @ValueOfEnum(enumClass = DroneStateOptions.class)
     @Column
     @Enumerated(EnumType.STRING)
     private DroneStateOptions state;
