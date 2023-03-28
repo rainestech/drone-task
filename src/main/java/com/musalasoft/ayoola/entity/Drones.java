@@ -2,7 +2,6 @@ package com.musalasoft.ayoola.entity;
 
 import com.musalasoft.ayoola.dto.DroneModelOptions;
 import com.musalasoft.ayoola.dto.DroneStateOptions;
-import com.musalasoft.ayoola.util.ValueOfEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -32,12 +31,10 @@ public class Drones {
     @Column
     private int batteryCapacity;
 
-    @ValueOfEnum(enumClass = DroneModelOptions.class)
     @Column
     @Enumerated(EnumType.STRING)
     private DroneModelOptions model;
 
-    @ValueOfEnum(enumClass = DroneStateOptions.class)
     @Column
     @Enumerated(EnumType.STRING)
     private DroneStateOptions state;

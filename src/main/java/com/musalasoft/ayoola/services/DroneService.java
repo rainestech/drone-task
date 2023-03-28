@@ -1,11 +1,14 @@
 package com.musalasoft.ayoola.services;
 
+import com.musalasoft.ayoola.dto.DroneStateOptions;
 import com.musalasoft.ayoola.entity.Drones;
 import com.musalasoft.ayoola.repository.DroneRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,6 +17,27 @@ public class DroneService {
 
     public DroneService(DroneRepository repository) {
         this.repository = repository;
+    }
+
+    /* Get a drone by its serial number
+     *
+     * @param serialNumber
+     * @return Null if not found or Drone record if found
+     */
+    @Nullable
+    public Drones getDrone(String serialNumber) {
+        return repository.findById(serialNumber)
+                .orElse(null);
+    }
+
+    /* Get list of drones by its current state
+     *
+     * @param desired state
+     * @return list of drones in the supplied state
+     */
+    public List<Drones> getListOfDronesByState(DroneStateOptions state) {
+        return repository.findByState(state)
+                .orElse(new ArrayList<>());
     }
 
     /* Check if record of the requested drone exists in the database

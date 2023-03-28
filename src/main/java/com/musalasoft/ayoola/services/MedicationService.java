@@ -3,6 +3,7 @@ package com.musalasoft.ayoola.services;
 import com.musalasoft.ayoola.entity.Medications;
 import com.musalasoft.ayoola.repository.MedicationRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -32,6 +33,17 @@ public class MedicationService {
      */
     public List<Medications> getMedications() {
         return repository.findAll();
+    }
+
+    /* Get the records of Medications available in the database
+     *
+     * @param data request Medication
+     * @return List of Medications
+     */
+    @Nullable
+    public Medications getMedication(String code) {
+        return repository.findById(code)
+                .orElse(null);
     }
 
     /* Save / edit Medication record

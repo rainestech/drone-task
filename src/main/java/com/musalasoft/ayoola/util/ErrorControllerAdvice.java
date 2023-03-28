@@ -1,6 +1,8 @@
 package com.musalasoft.ayoola.util;
 
+import com.musalasoft.ayoola.util.exceptions.DroneRuntimeException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -36,6 +38,25 @@ public class ErrorControllerAdvice extends ResponseEntityExceptionHandler {
         body.put("timestamp", new Date());
 
         return ResponseEntity.status(ex.getStatusCode()).body(body);
+    }
+
+    /* Handle and format ResponseStatusExceptions
+     *
+     * @param ex thrown ResponseStatusException
+     * @Param request Servlet Request
+     *
+     * @return ResponseEntity
+     */
+    @ExceptionHandler(DroneRuntimeException.class)
+    public ResponseEntity<Map<String, Object>> droneRuntimeExceptions(DroneRuntimeException ex, WebRequest request) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("status", HttpStatus.BAD_REQUEST);
+        body.put("error", "Unprocessable Action on Drones");
+        body.put("message", ex.getMessage());
+        body.put("path", ((ServletWebRequest) request).getRequest().getRequestURI());
+        body.put("timestamp", new Date());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
     /* Handle and format Validation Errors
