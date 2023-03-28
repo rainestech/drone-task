@@ -4,7 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
@@ -24,9 +24,12 @@ public class Medications {
     @Column
     private String name;
 
+    @NotEmpty
     @Column
     private String imageUrl;
 
+    @Min(value = 0, message = "Medication weight must be a positive number in grams")
+    @Max(value = 500, message = "Medications weight exceeds maximum grams deliverable by drones")
     @Column
     private float weight;
 

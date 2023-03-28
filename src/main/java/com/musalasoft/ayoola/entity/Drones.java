@@ -31,10 +31,12 @@ public class Drones {
     @Column
     private int batteryCapacity;
 
+    @NotNull
     @Column
     @Enumerated(EnumType.STRING)
     private DroneModelOptions model;
 
+    @NotNull
     @Column
     @Enumerated(EnumType.STRING)
     private DroneStateOptions state;
