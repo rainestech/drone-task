@@ -9,17 +9,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EntityInitializer implements ApplicationListener<ContextRefreshedEvent> {
-    private final PopulateSampleData sampleData;
     private static final Logger logger = LoggerFactory.getLogger(EntityInitializer.class);
+    private final PopulateSampleData sampleData;
+    private boolean alreadySetup;
+    @Value("${sample.data.populate:false}")
+    private boolean populateData;
 
     public EntityInitializer(PopulateSampleData sampleData) {
         this.sampleData = sampleData;
     }
-
-    private boolean alreadySetup;
-
-    @Value("${sample.data.populate:false}")
-    private boolean populateData;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {

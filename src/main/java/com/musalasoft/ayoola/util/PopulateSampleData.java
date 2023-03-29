@@ -41,11 +41,9 @@ public class PopulateSampleData {
         }
     }
 
-
-
     public void populateDrones() {
         for (int i = 0; i < 10; i++) {
-            Drones d  = new Drones();
+            Drones d = new Drones();
             d.setBatteryCapacity(random.nextInt(100));
             d.setState(randomState());
             d.setModel(randomModel());
@@ -58,7 +56,7 @@ public class PopulateSampleData {
 
     public void populateMedication() {
         for (int i = 0; i < 10; i++) {
-            Medications m  = new Medications();
+            Medications m = new Medications();
             m.setWeight(random.nextInt(200));
             m.setCode(faker.bothify("????_????_????_????_####", true));
             m.setImageUrl("https://fake-image.com/" + m.getCode());

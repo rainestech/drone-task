@@ -12,9 +12,9 @@ import java.util.Random;
 
 @Component
 public class BatteryMonitorService {
+    private static final Logger logger = LoggerFactory.getLogger(BatteryMonitorService.class);
     private final DroneBatteryService batteryService;
     private final DroneService droneService;
-    private static final Logger logger = LoggerFactory.getLogger(BatteryMonitorService.class);
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("d M yyyy H:m:s");
     private final Random random = new Random();
 
@@ -24,8 +24,7 @@ public class BatteryMonitorService {
     }
 
     @Scheduled(fixedDelay = 1200000)
-    public void reportCurrentTime() {
-        logger.info("Started Logging....");
+    public void droneBatteryMonitorStub() {
         for (Drones drone : droneService.getDrones()) {
             try {
                 drone.setBatteryCapacity(getDroneBatteryStatus(drone));
@@ -74,6 +73,6 @@ public class BatteryMonitorService {
     }
 
     private Integer batteryLevel(int min, int max) {
-        return random.nextInt(max-min) + min;
+        return random.nextInt(max - min) + min;
     }
 }

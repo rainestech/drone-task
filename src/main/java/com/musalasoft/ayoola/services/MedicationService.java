@@ -12,9 +12,11 @@ import java.util.List;
 @Service
 public class MedicationService {
     private final MedicationRepository repository;
+    private final DroneService droneService;
 
-    public MedicationService(MedicationRepository repository) {
+    public MedicationService(MedicationRepository repository, DroneService droneService) {
         this.repository = repository;
+        this.droneService = droneService;
     }
 
     /* Check if record of the requested Medication exists in the database
@@ -63,9 +65,16 @@ public class MedicationService {
      * @return removed Medication Record
      */
     public Medications deleteMedication(String medicationCode) {
+        return deleteMedication(medicationCode, false);
+    }
+
+    public Medications deleteMedication(String medicationCode, boolean force) {
         Medications data = repository.findById(medicationCode)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Medication with code: " + medicationCode + " not found"));
+
+        if (force)
+            droneService.unloadMedication(data);
 
         repository.delete(data);
         return data;

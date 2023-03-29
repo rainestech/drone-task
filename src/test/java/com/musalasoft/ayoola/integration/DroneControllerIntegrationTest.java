@@ -20,28 +20,24 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
 @SpringBootTest
 class DroneControllerIntegrationTest {
+    private final MediaType jsonMediaType = MediaType.APPLICATION_JSON;
     @Autowired
     DroneController droneController;
-
     @Autowired
     DroneRepository droneRepository;
-
     @Autowired
     PopulateSampleData sampleData;
-
     @Autowired
     private MockMvc mockMvc;
-
-    private final MediaType jsonMediaType = MediaType.APPLICATION_JSON;
 
     @Test
     void whenDroneControllerIndex_thenReturnStatusOkAndJsonContent() throws Exception {
@@ -151,7 +147,6 @@ class DroneControllerIntegrationTest {
         data.setState(DroneStateOptions.DELIVERED);
         String jsonData = mapper.writeValueAsString(data);
 
-        System.out.println("Updating Sample Data.............................................." + new Date().getTime());
         mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/drones")
                 .content(jsonData)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -162,7 +157,6 @@ class DroneControllerIntegrationTest {
                 .andReturn();
 
         // fetching test data matches the new update
-        System.out.println("Fetching Sample Data.............................................." + new Date().getTime());
         mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/drones/sn/TESTDATA3")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())

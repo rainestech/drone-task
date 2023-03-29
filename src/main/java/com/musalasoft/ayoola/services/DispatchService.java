@@ -75,9 +75,7 @@ public class DispatchService {
         if (drone.getState().equals(DroneStateOptions.IDLE) || drone.getState().equals(DroneStateOptions.LOADING)) {
             if (drone.getState().equals(DroneStateOptions.IDLE))
                 changeState(DroneStateOptions.LOADING, drone);
-        }
-
-        else
+        } else
             throw new DroneNotInLoadableStateException("The selected drone not currently IDLE nor in a LOADING state");
 
         double alreadyLoaded = drone.getLoadedMedications().stream()
@@ -118,6 +116,6 @@ public class DispatchService {
     }
 
     public List<Drones> getAvailableDronesForLoading() {
-        return droneService.getListOfDronesByState(DroneStateOptions.IDLE);
+        return droneService.getListOfDronesForLoading();
     }
 }

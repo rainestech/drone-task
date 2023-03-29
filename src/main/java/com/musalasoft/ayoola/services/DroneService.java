@@ -2,6 +2,7 @@ package com.musalasoft.ayoola.services;
 
 import com.musalasoft.ayoola.dto.DroneStateOptions;
 import com.musalasoft.ayoola.entity.Drones;
+import com.musalasoft.ayoola.entity.Medications;
 import com.musalasoft.ayoola.repository.DroneBatteryRepository;
 import com.musalasoft.ayoola.repository.DroneRepository;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,20 @@ public class DroneService {
      */
     public List<Drones> getListOfDronesByState(DroneStateOptions state) {
         return repository.findByState(state)
+                .orElse(new ArrayList<>());
+    }
+
+    /* Get list of drones by available for loading
+     *
+     * @param desired state
+     * @return list of drones in the supplied state
+     */
+    public List<Drones> getListOfDronesForLoading() {
+        List<DroneStateOptions> states = new ArrayList<>();
+        states.add(DroneStateOptions.LOADING);
+        states.add(DroneStateOptions.IDLE);
+
+        return repository.dronesAvailableForLoading(500, 24, states)
                 .orElse(new ArrayList<>());
     }
 
@@ -83,5 +98,12 @@ public class DroneService {
 
         repository.delete(data);
         return data;
+    }
+
+    public void unloadMedication(Medications data) {
+        for (Drones d : repository.getDroneLoadedWithMedication(data)) {
+            d.getLoadedMedications().remove(data);
+            repository.save(d);
+        }
     }
 }
