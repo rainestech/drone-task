@@ -1,13 +1,11 @@
 package com.musalasoft.ayoola.services;
 
 import com.musalasoft.ayoola.entity.DroneBatteryEventLog;
-import com.musalasoft.ayoola.entity.Drones;
 import com.musalasoft.ayoola.repository.DroneBatteryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Service
 public class DroneBatteryService {

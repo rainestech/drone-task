@@ -24,11 +24,21 @@ public class DroneController {
         return ResponseEntity.ok(service.getDrones());
     }
 
+    @GetMapping("/sn/{serialNumber}")
+    public ResponseEntity<Drones> getDroneBySerialNumber(@PathVariable String serialNumber) {
+        Drones drone = service.getDrone(serialNumber);
+
+        if (drone == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Drone Not Found");
+
+        return ResponseEntity.ok(drone);
+    }
+
     @PostMapping
     public ResponseEntity<Drones> saveDrone(@Valid @RequestBody Drones data) {
         if (service.droneExists(data))
             throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY,
-                    "Medication exists in the database");
+                    "Drone exists in the database");
 
         return ResponseEntity.ok(service.saveDrone(data));
     }

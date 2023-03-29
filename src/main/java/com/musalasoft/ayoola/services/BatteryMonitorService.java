@@ -23,22 +23,26 @@ public class BatteryMonitorService {
         this.droneService = droneService;
     }
 
-    @Scheduled(fixedDelay = 7200000)
+    @Scheduled(fixedDelay = 1200000)
     public void reportCurrentTime() {
         logger.info("Started Logging....");
         for (Drones drone : droneService.getDrones()) {
-            drone.setBatteryCapacity(getDroneBatteryStatus(drone));
+            try {
+                drone.setBatteryCapacity(getDroneBatteryStatus(drone));
 
-            DroneBatteryEventLog batteryEventLog = new DroneBatteryEventLog(drone, drone.getBatteryCapacity());
-            batteryService.saveEvent(batteryEventLog);
+                DroneBatteryEventLog batteryEventLog = new DroneBatteryEventLog(drone, drone.getBatteryCapacity());
+                batteryService.saveEvent(batteryEventLog);
 
-            String consoleLog = String.format("%s (%s) is at %s as at %s",
-                    drone.getModel(), drone.getSerialNumber(),
-                    batteryEventLog.getBatteryPercentage() + "%",
-                    dateFormat.format(batteryEventLog.getCreatedAt()));
-            logger.info(consoleLog);
+                String consoleLog = String.format("%s (%s) is at %s as at %s",
+                        drone.getModel(), drone.getSerialNumber(),
+                        batteryEventLog.getBatteryPercentage() + "%",
+                        dateFormat.format(batteryEventLog.getCreatedAt()));
+                logger.info(consoleLog);
 
-            droneService.saveDrone(drone);
+                droneService.saveDrone(drone);
+            } catch (Exception ex) {
+                logger.error(ex.getMessage());
+            }
         }
     }
 
@@ -61,6 +65,9 @@ public class BatteryMonitorService {
 
             // simulate battery draining as the drone is delivering / returning
             default -> {
+                if (drone.getBatteryCapacity() < 20)
+                    return drone.getBatteryCapacity();
+
                 return drone.getBatteryCapacity() - 2;
             }
         }

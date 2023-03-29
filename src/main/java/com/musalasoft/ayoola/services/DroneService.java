@@ -2,6 +2,7 @@ package com.musalasoft.ayoola.services;
 
 import com.musalasoft.ayoola.dto.DroneStateOptions;
 import com.musalasoft.ayoola.entity.Drones;
+import com.musalasoft.ayoola.repository.DroneBatteryRepository;
 import com.musalasoft.ayoola.repository.DroneRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.Nullable;
@@ -14,9 +15,11 @@ import java.util.List;
 @Service
 public class DroneService {
     private final DroneRepository repository;
+    private final DroneBatteryRepository batteryRepository;
 
-    public DroneService(DroneRepository repository) {
+    public DroneService(DroneRepository repository, DroneBatteryRepository batteryRepository) {
         this.repository = repository;
+        this.batteryRepository = batteryRepository;
     }
 
     /* Get a drone by its serial number
@@ -74,6 +77,9 @@ public class DroneService {
         Drones data = repository.findById(serialNumber)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Drone with serialNumber: " + serialNumber + " not found"));
+
+        batteryRepository.findByDrone_SerialNumber(serialNumber)
+                .ifPresent(batteryRepository::deleteAll);
 
         repository.delete(data);
         return data;

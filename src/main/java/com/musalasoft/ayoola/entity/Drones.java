@@ -1,5 +1,6 @@
 package com.musalasoft.ayoola.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.musalasoft.ayoola.dto.DroneModelOptions;
 import com.musalasoft.ayoola.dto.DroneStateOptions;
 import jakarta.persistence.*;
@@ -23,6 +24,8 @@ public class Drones {
     @Column(length = 100)
     private String serialNumber;
 
+    // Access is set to read only from client since this value depends on the loaded medications
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Min(value = 0, message = "Weight must be a positive number in grams")
     @Max(value = 500, message = "Maximum weight is 500 grams")
     @Column
@@ -43,7 +46,7 @@ public class Drones {
     @Enumerated(EnumType.STRING)
     private DroneStateOptions state;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "drone_loaded_medications",
             joinColumns = {@JoinColumn(name = "droneSn", referencedColumnName = "serialNumber")},
@@ -63,6 +66,7 @@ public class Drones {
         return getClass().hashCode();
     }
 
+    // this set drone weight
     public void setLoadedMedications(List<Medications> medications) {
         this.loadedMedications = medications;
         this.weight = (float) medications.stream().mapToDouble(Medications::getWeight).sum();
