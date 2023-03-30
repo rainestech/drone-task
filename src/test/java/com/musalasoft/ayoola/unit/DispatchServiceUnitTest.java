@@ -128,7 +128,7 @@ class DispatchServiceUnitTest {
         req.setDrone(drone);
 
         // drone state can be changed to loading at 25% battery capacity and above
-        assertTrue(service.changeState(req).getState().equals(DroneStateOptions.LOADING));
+        assertEquals(DroneStateOptions.LOADING, service.changeState(req).getState());
     }
 
     @Test

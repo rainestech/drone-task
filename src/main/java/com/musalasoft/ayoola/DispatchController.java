@@ -69,4 +69,10 @@ public class DispatchController {
         return ResponseEntity.ok(service.getAvailableDronesForLoading());
     }
 
+    @GetMapping("/check_battery/{serialNumber}")
+    public ResponseEntity<Integer> getCheckBattery(@PathVariable String serialNumber) {
+        Drones drone = service.getDrone(serialNumber);
+        return ResponseEntity.ok(drone.getBatteryCapacity());
+    }
+
 }

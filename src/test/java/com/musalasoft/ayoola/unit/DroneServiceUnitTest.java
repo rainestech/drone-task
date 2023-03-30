@@ -3,6 +3,7 @@ package com.musalasoft.ayoola.unit;
 import com.musalasoft.ayoola.dto.DroneModelOptions;
 import com.musalasoft.ayoola.dto.DroneStateOptions;
 import com.musalasoft.ayoola.entity.Drones;
+import com.musalasoft.ayoola.entity.Medications;
 import com.musalasoft.ayoola.repository.DroneRepository;
 import com.musalasoft.ayoola.services.DroneService;
 import com.musalasoft.ayoola.util.PopulateSampleData;
@@ -14,8 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -34,6 +34,7 @@ class DroneServiceUnitTest {
     public void setup() {
         sampleData.populateDrones();
         sampleData.populateMedication();
+        sampleData.loadItems();
     }
 
     @Test
@@ -98,5 +99,17 @@ class DroneServiceUnitTest {
 
         service.deleteDrone("TESTDATA-1234");
         assertTrue(droneRepository.findById("TESTDATA-1234").isEmpty());
+    }
+
+    @Test
+    void testUnloadMedication() {
+        Drones drone = droneRepository.findByLoadedMedicationsIsNotNull().get(0);
+        Medications med = drone.getLoadedMedications().get(0);
+
+        service.unloadMedication(med);
+
+        assertFalse(droneRepository.findByLoadedMedicationsIsNotNull().stream()
+                .anyMatch(d -> d.getLoadedMedications().stream()
+                        .anyMatch(m -> m.getCode().equals(med.getCode()))));
     }
 }

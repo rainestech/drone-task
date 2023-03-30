@@ -118,4 +118,8 @@ public class DispatchService {
     public List<Drones> getAvailableDronesForLoading() {
         return droneService.getListOfDronesForLoading();
     }
+
+    public Drones getDrone(String serialNumber) {
+        return droneService.getDrone(serialNumber);
+    }
 }

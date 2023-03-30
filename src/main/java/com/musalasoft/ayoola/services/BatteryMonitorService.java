@@ -23,7 +23,7 @@ public class BatteryMonitorService {
         this.droneService = droneService;
     }
 
-    @Scheduled(fixedDelay = 1200000)
+    @Scheduled(fixedDelay = 1000)
     public void droneBatteryMonitorStub() {
         for (Drones drone : droneService.getDrones()) {
             try {
@@ -45,7 +45,7 @@ public class BatteryMonitorService {
         }
     }
 
-    public Integer getDroneBatteryStatus(Drones drone) {
+    private Integer getDroneBatteryStatus(Drones drone) {
         switch (drone.getState()) {
             // assume drones are fully charged when Idle
             case IDLE -> {
