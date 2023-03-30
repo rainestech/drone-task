@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.musalasoft</groupId>
     <artifactId>ayoola</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>drones-0.1</version>
     <name>Drones</name>
     <description>A drone delivery system implemented with Spring Boot</description>
     <properties>
@@ -58,6 +58,12 @@
             <groupId>org.awaitility</groupId>
             <artifactId>awaitility</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>2.0.4</version>
         </dependency>
 
     </dependencies>
