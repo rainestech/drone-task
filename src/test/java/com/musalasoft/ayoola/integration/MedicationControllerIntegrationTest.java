@@ -79,7 +79,7 @@ class MedicationControllerIntegrationTest {
         String dataInvalidName = """
                 {
                     "code": "TEST_DATA_MED_123",
-                    "name": "TEST_MEDICATION-NAME",
+                    "name": "TEST_MEDICATION-NAME-@",
                     "imageUrl": "https://imageplaceholder.com/image1",
                     "weight": 200
                 }""";

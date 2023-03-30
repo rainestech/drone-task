@@ -269,8 +269,8 @@ class DispatchControllerIntegrationTest {
         droneRepository.save(drone3);
 
         // set drone4 with Low Battery
-        drone3.setState(DroneStateOptions.LOADED);
-        drone3.setBatteryCapacity(80);
+        drone4.setState(DroneStateOptions.LOADED);
+        drone4.setBatteryCapacity(80);
         droneRepository.save(drone4);
 
         // Get available drones from controller
