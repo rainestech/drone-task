@@ -2,7 +2,10 @@ package com.musalasoft.ayoola.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.musalasoft.ayoola.MedicationController;
+import com.musalasoft.ayoola.dto.DroneStateOptions;
+import com.musalasoft.ayoola.entity.Drones;
 import com.musalasoft.ayoola.entity.Medications;
+import com.musalasoft.ayoola.repository.DroneRepository;
 import com.musalasoft.ayoola.repository.MedicationRepository;
 import com.musalasoft.ayoola.util.PopulateSampleData;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,6 +22,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,6 +44,9 @@ class MedicationControllerIntegrationTest {
     MedicationRepository medicationRepository;
 
     @Autowired
+    DroneRepository droneRepository;
+
+    @Autowired
     PopulateSampleData sampleData;
 
     @Autowired
@@ -47,6 +54,7 @@ class MedicationControllerIntegrationTest {
 
     @BeforeAll
     public void setup() {
+        sampleData.populateDrones();
         sampleData.populateMedication();
     }
 
@@ -145,11 +153,43 @@ class MedicationControllerIntegrationTest {
     }
 
     @Test
-    void whenDeleteMedication_thenRemoveDeletedRecordAndReturnIt() throws Exception {
+    void whenDeleteLoadedMedicationWithOutForce_thenReturn4XXClient() throws Exception {
         Medications med = medicationRepository.findAll().get(0);
+        Drones drone = droneRepository.findAll().get(0);
+
+        List<Medications> medToLoad = new ArrayList<>();
+        medToLoad.add(med);
+
+        drone.setState(DroneStateOptions.LOADING);
+        drone.setBatteryCapacity(100);
+        drone.setLoadedMedications(medToLoad);
+
+        droneRepository.save(drone);
 
         // save init
         mockMvc.perform(MockMvcRequestBuilders.delete(url + "/remove/" + med.getCode())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.content()
+                        .contentType(jsonMediaType));
+    }
+
+    @Test
+    void whenDeleteLoadedMedicationWithForce_thenReturnDeletedMedication() throws Exception {
+        Medications med = medicationRepository.findAll().get(0);
+        Drones drone = droneRepository.findAll().get(0);
+
+        List<Medications> medToLoad = new ArrayList<>();
+        medToLoad.add(med);
+
+        drone.setState(DroneStateOptions.LOADING);
+        drone.setBatteryCapacity(100);
+        drone.setLoadedMedications(medToLoad);
+
+        droneRepository.save(drone);
+
+        // save init
+        mockMvc.perform(MockMvcRequestBuilders.delete(url + "/remove/" + med.getCode() + "/1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content()

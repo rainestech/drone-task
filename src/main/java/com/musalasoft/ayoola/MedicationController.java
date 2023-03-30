@@ -3,6 +3,7 @@ package com.musalasoft.ayoola;
 import com.musalasoft.ayoola.entity.Medications;
 import com.musalasoft.ayoola.services.MedicationService;
 import jakarta.validation.Valid;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @Validated
 @RestController
@@ -40,8 +42,16 @@ public class MedicationController {
         return ResponseEntity.ok(service.saveMedication(data));
     }
 
-    @DeleteMapping("/remove/{code}")
-    public ResponseEntity<Medications> delete(@PathVariable String code) {
-        return ResponseEntity.ok(service.deleteMedication(code));
+    @DeleteMapping({"/remove/{code}", "/remove/{code}/{force}"})
+    public ResponseEntity<Medications> delete(@PathVariable String code, @PathVariable Optional<Integer> force) {
+        if (force.isPresent() && force.get() == 1)
+            return ResponseEntity.ok(service.deleteMedication(code, true));
+
+        try {
+            return ResponseEntity.ok(service.deleteMedication(code));
+        } catch (DataIntegrityViolationException exception) {
+            throw new ResponseStatusException(HttpStatus.EXPECTATION_FAILED,
+                    "Unable to delete loaded medication, Unload from the Drone first");
+        }
     }
 }

@@ -20,6 +20,11 @@ import java.util.Map;
 
 @ControllerAdvice
 public class ErrorControllerAdvice extends ResponseEntityExceptionHandler {
+    private static final String ERROR = "error";
+    private static final String STATUS = "status";
+    private static final String MESSAGE = "message";
+    private static final String PATH = "path";
+    private static final String TIMESTAMP = "timestamp";
 
     /* Handle and format ResponseStatusExceptions
      *
@@ -31,11 +36,11 @@ public class ErrorControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<Map<String, Object>> customException(ResponseStatusException ex, WebRequest request) {
         Map<String, Object> body = new HashMap<>();
-        body.put("status", ex.getStatusCode());
-        body.put("error", ex.getReason());
-        body.put("message", ex.getMessage());
-        body.put("path", ((ServletWebRequest) request).getRequest().getRequestURI());
-        body.put("timestamp", new Date());
+        body.put(STATUS, ex.getStatusCode());
+        body.put(ERROR, ex.getReason());
+        body.put(MESSAGE, ex.getMessage());
+        body.put(PATH, ((ServletWebRequest) request).getRequest().getRequestURI());
+        body.put(TIMESTAMP, new Date());
 
         return ResponseEntity.status(ex.getStatusCode()).body(body);
     }
@@ -50,11 +55,11 @@ public class ErrorControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(DroneRuntimeException.class)
     public ResponseEntity<Map<String, Object>> droneRuntimeExceptions(DroneRuntimeException ex, WebRequest request) {
         Map<String, Object> body = new HashMap<>();
-        body.put("status", HttpStatus.BAD_REQUEST);
-        body.put("error", "Unprocessable Action on Drones");
-        body.put("message", ex.getMessage());
-        body.put("path", ((ServletWebRequest) request).getRequest().getRequestURI());
-        body.put("timestamp", new Date());
+        body.put(STATUS, HttpStatus.BAD_REQUEST);
+        body.put(ERROR, "Unprocessable Action on Drones");
+        body.put(MESSAGE, ex.getMessage());
+        body.put(PATH, ((ServletWebRequest) request).getRequest().getRequestURI());
+        body.put(TIMESTAMP, new Date());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
@@ -76,11 +81,11 @@ public class ErrorControllerAdvice extends ResponseEntityExceptionHandler {
         });
 
         Map<String, Object> body = new HashMap<>();
-        body.put("status", ex.getStatusCode());
-        body.put("error", "Validation Error");
-        body.put("message", validationErrors);
-        body.put("path", ((ServletWebRequest) request).getRequest().getRequestURI());
-        body.put("timestamp", new Date());
+        body.put(STATUS, ex.getStatusCode());
+        body.put(ERROR, "Validation Error");
+        body.put(MESSAGE, validationErrors);
+        body.put(PATH, ((ServletWebRequest) request).getRequest().getRequestURI());
+        body.put(TIMESTAMP, new Date());
         return ResponseEntity.status(ex.getStatusCode()).body(body);
     }
 }

@@ -70,7 +70,7 @@ class DispatchControllerIntegrationTest {
                         "serialNumber": "TEST_DATA_DISPATCH",
                         "weight": 0.0,
                         "batteryCapacity": 85,
-                        "model": "Cruiserweight",
+                        "model": "CRUISERWEIGHT",
                         "state": "RETURNING",
                         "loadedMedications": []
                     }""";
@@ -117,7 +117,7 @@ class DispatchControllerIntegrationTest {
         droneRepository.save(drone);
 
         LoadMedicationRequest req = new LoadMedicationRequest();
-        req.setQuantity(40);
+        req.setQuantity(600);
         req.setDrone(drone);
         req.setMedication(med);
 

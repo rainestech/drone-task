@@ -36,7 +36,7 @@ public class DroneBatteryService {
      * @return list of Battery event logs
      */
     public List<DroneBatteryEventLog> getDronesEventLog(String droneSerialNumber) {
-        return repository.findByDrone_SerialNumber(droneSerialNumber)
+        return repository.getDroneBySerialNumber(droneSerialNumber)
                 .orElse(new ArrayList<>());
     }
 }

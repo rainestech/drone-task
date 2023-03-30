@@ -77,7 +77,7 @@ class DroneServiceUnitTest {
         Drones drone = new Drones();
         drone.setWeight(0);
         drone.setState(DroneStateOptions.LOADING);
-        drone.setModel(DroneModelOptions.Cruiserweight);
+        drone.setModel(DroneModelOptions.CRUISERWEIGHT);
         drone.setBatteryCapacity(100);
         drone.setSerialNumber("TESTDATA-1234");
 
@@ -91,7 +91,7 @@ class DroneServiceUnitTest {
         Drones drone = new Drones();
         drone.setWeight(0);
         drone.setState(DroneStateOptions.LOADING);
-        drone.setModel(DroneModelOptions.Cruiserweight);
+        drone.setModel(DroneModelOptions.CRUISERWEIGHT);
         drone.setBatteryCapacity(100);
         drone.setSerialNumber("TESTDATA-1234");
 

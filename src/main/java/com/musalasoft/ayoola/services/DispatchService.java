@@ -18,8 +18,10 @@ import java.util.List;
 
 @Service
 public class DispatchService {
+    public static final String DRONE_NOT_FOUND = "Drone Not Found";
     private final DroneService droneService;
     private final MedicationService medicationService;
+
 
     public DispatchService(DroneService droneService, MedicationService medicationService) {
         this.droneService = droneService;
@@ -36,7 +38,7 @@ public class DispatchService {
     public List<Medications> getLoadedItems(String serialNumber) {
         Drones drone = droneService.getDrone(serialNumber);
         if (drone == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Drone Not Found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, DRONE_NOT_FOUND);
 
         return drone.getLoadedMedications();
     }
@@ -94,7 +96,7 @@ public class DispatchService {
     public Drones changeState(String droneSerialNumber, DroneStateOptions state) {
         Drones drone = droneService.getDrone(droneSerialNumber);
         if (drone == null)
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Drone Not Found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, DRONE_NOT_FOUND);
 
         return changeState(state, drone);
     }

@@ -93,7 +93,7 @@ public class DroneService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Drone with serialNumber: " + serialNumber + " not found"));
 
-        batteryRepository.findByDrone_SerialNumber(serialNumber)
+        batteryRepository.getDroneBySerialNumber(serialNumber)
                 .ifPresent(batteryRepository::deleteAll);
 
         repository.delete(data);

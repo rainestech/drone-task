@@ -62,7 +62,7 @@ class DroneControllerIntegrationTest {
                         "serialNumber": "TESTDATA",
                         "weight": 0.0,
                         "batteryCapacity": 85,
-                        "model": "Cruiserweight",
+                        "model": "CRUISERWEIGHT",
                         "state": "RETURNING",
                         "loadedMedications": []
                     }""";
@@ -90,7 +90,7 @@ class DroneControllerIntegrationTest {
                         "serialNumber": "TESTDATAWEIGHT",
                         "weight": 45,
                         "batteryCapacity": 85,
-                        "model": "Cruiserweight",
+                        "model": "CRUISERWEIGHT",
                         "state": "RETURNING",
                         "loadedMedications": []
                     }""";
@@ -112,7 +112,7 @@ class DroneControllerIntegrationTest {
                         "serialNumber": "TESTDATA2",
                         "weight": 0.0,
                         "batteryCapacity": 85,
-                        "model": "Cruiserweight",
+                        "model": "CRUISERWEIGHT",
                         "state": "RETURNING",
                         "loadedMedications": []
                     }""";
@@ -136,7 +136,7 @@ class DroneControllerIntegrationTest {
         Drones data = new Drones();
         data.setState(DroneStateOptions.LOADING);
         data.setSerialNumber("TESTDATA3");
-        data.setModel(DroneModelOptions.Cruiserweight);
+        data.setModel(DroneModelOptions.CRUISERWEIGHT);
         data.setLoadedMedications(new ArrayList<>()); // sets weight to zero since medications is an empty array
 
         ObjectMapper mapper = new ObjectMapper();
@@ -173,7 +173,7 @@ class DroneControllerIntegrationTest {
                         "serialNumber": "TESTDATA4",
                         "weight": 0.0,
                         "batteryCapacity": 85,
-                        "model": "Cruiserweight",
+                        "model": "CRUISERWEIGHT",
                         "state": "RETURNING",
                         "loadedMedications": []
                     }""";
