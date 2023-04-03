@@ -9,8 +9,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.musalasoft</groupId>
-    <artifactId>ayoola</artifactId>
-    <version>drones-0.1</version>
+    <artifactId>drone</artifactId>
+    <version>task-0.1</version>
     <name>Drones</name>
     <description>A drone delivery system implemented with Spring Boot</description>
     <properties>

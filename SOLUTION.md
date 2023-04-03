@@ -1,4 +1,4 @@
-### The solution to the task is being developed on a springboot application framework.
+### The solution to the task has been developed on a springboot application framework.
 
 ### System Requirements
 
@@ -22,7 +22,7 @@
 ### Building the Application
 
 * to build the application, use ```mvn clean package``` command to generate the fat jar of the application. The fat jar
-  will be located in the `target` folder within the root of the application folder named `ayoola-drones-0.1`
+  will be located in the `target` folder within the root of the application folder named `drone-task-0.1`
 
 #### Other information
 
