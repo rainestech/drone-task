@@ -2,10 +2,12 @@ package com.musalasoft.drone.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.musalasoft.drone.MedicationController;
+import com.musalasoft.drone.entity.DroneBatteryEventLog;
 import com.musalasoft.drone.entity.Drones;
 import com.musalasoft.drone.repository.DroneBatteryRepository;
 import com.musalasoft.drone.util.PopulateSampleData;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,6 +21,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.await;
@@ -52,9 +55,10 @@ class DroneBatteryLogControllerIntegrationTest {
     }
 
     @Test
+    @Order(1)
     void whenGettingLogsOfDroneBatteries_thenReturnCurrentLogInJson() throws Exception {
         // using awaitility to delay execution for the scheduler to have some data before queries
-        await().atLeast(5, TimeUnit.SECONDS);
+        await().atLeast(10, TimeUnit.SECONDS);
 
         mockMvc.perform(MockMvcRequestBuilders.get(url)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -64,11 +68,18 @@ class DroneBatteryLogControllerIntegrationTest {
     }
 
     @Test
+    @Order(2)
     void whenGettingLogsOfSpecificDroneBattery_thenReturnLogsOfSpecifiedDroneBatteryOnly() throws Exception {
         // using awaitility to delay execution for the scheduler to have some data before queries
-        await().atLeast(5, TimeUnit.SECONDS);
+        await().atLeast(10, TimeUnit.SECONDS);
 
-        Drones drone = batteryRepository.findAll().get(0).getDrone();
+        List<DroneBatteryEventLog> batteryLog = batteryRepository.findAll();
+        if (batteryLog.isEmpty()) {
+            whenGettingLogsOfSpecificDroneBattery_thenReturnLogsOfSpecifiedDroneBatteryOnly();
+            return;
+        }
+
+        Drones drone = batteryLog.get(0).getDrone();
         Drones drone2 = batteryRepository.findAll().stream()
                 .filter(b -> !b.getDrone().equals(drone)).findFirst().get().getDrone();
 
