@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.await;
@@ -80,8 +81,13 @@ class DroneBatteryLogControllerIntegrationTest {
         }
 
         Drones drone = batteryLog.get(0).getDrone();
-        Drones drone2 = batteryRepository.findAll().stream()
-                .filter(b -> !b.getDrone().equals(drone)).findFirst().get().getDrone();
+        Optional<DroneBatteryEventLog> drone2 = batteryLog.stream()
+                .filter(b -> !b.getDrone().equals(drone)).findFirst();
+
+        if (drone2.isEmpty()) {
+            whenGettingLogsOfSpecificDroneBattery_thenReturnLogsOfSpecifiedDroneBatteryOnly();
+            return;
+        }
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get(url + "/" + drone.getSerialNumber())
                 .contentType(MediaType.APPLICATION_JSON))
@@ -91,6 +97,6 @@ class DroneBatteryLogControllerIntegrationTest {
                 .andReturn();
 
         assertTrue(result.getResponse().getContentAsString().contains(drone.getSerialNumber()));
-        assertFalse(result.getResponse().getContentAsString().contains(drone2.getSerialNumber()));
+        assertFalse(result.getResponse().getContentAsString().contains(drone2.get().getDrone().getSerialNumber()));
     }
 }

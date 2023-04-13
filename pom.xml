@@ -82,7 +82,21 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>16</source>
+                    <target>16</target>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+    <repositories>
+        <repository>
+            <id>${CENTRAL-REPO}</id>
+            <url>http://${NEXUS-IP}:${NEXUS-PORT}/repository/${GROUP-REPO}</url>
+        </repository>
+    </repositories>
 
 </project>
