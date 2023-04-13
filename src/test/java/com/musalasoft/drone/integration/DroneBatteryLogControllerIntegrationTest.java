@@ -5,6 +5,7 @@ import com.musalasoft.drone.MedicationController;
 import com.musalasoft.drone.entity.DroneBatteryEventLog;
 import com.musalasoft.drone.entity.Drones;
 import com.musalasoft.drone.repository.DroneBatteryRepository;
+import com.musalasoft.drone.services.BatteryMonitorService;
 import com.musalasoft.drone.util.PopulateSampleData;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
@@ -21,13 +22,15 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
@@ -48,6 +51,9 @@ class DroneBatteryLogControllerIntegrationTest {
     PopulateSampleData sampleData;
 
     @Autowired
+    BatteryMonitorService batteryMonitorService;
+
+    @Autowired
     private MockMvc mockMvc;
 
     @BeforeAll
@@ -58,8 +64,13 @@ class DroneBatteryLogControllerIntegrationTest {
     @Test
     @Order(1)
     void whenGettingLogsOfDroneBatteries_thenReturnCurrentLogInJson() throws Exception {
-        // using awaitility to delay execution for the scheduler to have some data before queries
-        await().atLeast(30, TimeUnit.SECONDS);
+        await()
+                // Duration set to 6 for test purposes so that the test won't take long to complete
+                // the value of the fixedDelay on the class should also be modified to reflect
+                // this value for test purposes
+                .atMost(Duration.ofSeconds(30))
+                .untilAsserted(() -> verify(batteryMonitorService,
+                        atLeast(5)).droneBatteryMonitorStub());
 
         mockMvc.perform(MockMvcRequestBuilders.get(url)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -71,8 +82,13 @@ class DroneBatteryLogControllerIntegrationTest {
     @Test
     @Order(2)
     void whenGettingLogsOfSpecificDroneBattery_thenReturnLogsOfSpecifiedDroneBatteryOnly() throws Exception {
-        // using awaitility to delay execution for the scheduler to have some data before queries
-        await().atLeast(30, TimeUnit.SECONDS);
+        await()
+                // Duration set to 6 for test purposes so that the test won't take long to complete
+                // the value of the fixedDelay on the class should also be modified to reflect
+                // this value for test purposes
+                .atMost(Duration.ofSeconds(30))
+                .untilAsserted(() -> verify(batteryMonitorService,
+                        atLeast(5)).droneBatteryMonitorStub());
 
         List<DroneBatteryEventLog> batteryLog = batteryRepository.findAll();
         if (batteryLog.isEmpty()) {
