@@ -15,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -50,7 +51,7 @@ class DroneBatteryLogControllerIntegrationTest {
     @Autowired
     PopulateSampleData sampleData;
 
-    @Autowired
+    @SpyBean
     BatteryMonitorService batteryMonitorService;
 
     @Autowired
@@ -82,6 +83,7 @@ class DroneBatteryLogControllerIntegrationTest {
     @Test
     @Order(2)
     void whenGettingLogsOfSpecificDroneBattery_thenReturnLogsOfSpecifiedDroneBatteryOnly() throws Exception {
+        // used here to actively delay execution
         await()
                 // Duration set to 6 for test purposes so that the test won't take long to complete
                 // the value of the fixedDelay on the class should also be modified to reflect
