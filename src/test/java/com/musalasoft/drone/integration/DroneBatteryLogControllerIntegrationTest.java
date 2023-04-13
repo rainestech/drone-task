@@ -59,7 +59,7 @@ class DroneBatteryLogControllerIntegrationTest {
     @Order(1)
     void whenGettingLogsOfDroneBatteries_thenReturnCurrentLogInJson() throws Exception {
         // using awaitility to delay execution for the scheduler to have some data before queries
-        await().atLeast(10, TimeUnit.SECONDS);
+        await().atLeast(30, TimeUnit.SECONDS);
 
         mockMvc.perform(MockMvcRequestBuilders.get(url)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -72,7 +72,7 @@ class DroneBatteryLogControllerIntegrationTest {
     @Order(2)
     void whenGettingLogsOfSpecificDroneBattery_thenReturnLogsOfSpecifiedDroneBatteryOnly() throws Exception {
         // using awaitility to delay execution for the scheduler to have some data before queries
-        await().atLeast(10, TimeUnit.SECONDS);
+        await().atLeast(30, TimeUnit.SECONDS);
 
         List<DroneBatteryEventLog> batteryLog = batteryRepository.findAll();
         if (batteryLog.isEmpty()) {

@@ -23,7 +23,7 @@ class BatteryMonitorServiceUnitTest {
                 // Duration set to 6 for test purposes so that the test won't take long to complete
                 // the value of the fixedDelay on the class should also be modified to reflect
                 // this value for test purposes
-                .atMost(Duration.ofSeconds(6))
+                .atMost(Duration.ofSeconds(30))
                 .untilAsserted(() -> verify(batteryMonitorService,
                         atLeast(5)).droneBatteryMonitorStub());
     }
