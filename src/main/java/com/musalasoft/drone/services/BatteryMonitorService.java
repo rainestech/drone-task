@@ -23,7 +23,7 @@ public class BatteryMonitorService {
         this.droneService = droneService;
     }
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 4000)
     public void droneBatteryMonitorStub() {
         for (Drones drone : droneService.getDrones()) {
             try {
