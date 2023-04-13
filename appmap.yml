@@ -1,0 +1,6 @@
+name: ayoola-adekola
+packages:
+  - path: com.musalasoft.drone
+    shallow: true
+language: java
+appmap_dir: target/appmap
