@@ -110,6 +110,8 @@ class DispatchControllerIntegrationTest {
     void whenLoadDroneWithMedicationsGreaterThan500Grams_thenReturn4XXClientErrors() throws Exception {
         Drones drone = droneRepository.findAll().get(0);
         Medications med = medicationRepository.findAll().get(0);
+        med.setWeight(200);
+        medicationRepository.save(med);
 
         // prepare drone for loading
         drone.setState(DroneStateOptions.LOADING);
